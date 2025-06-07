@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>projectSynergy</title>
+        <link rel="stylesheet" href="frontend/dist/styles/output.css">
+    </head>
+
+    <body>
+        <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+
+            <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+                <h2 class="mt-10 text-2xl/9 font-bold tracking-tight text-gray-900">
+                    Sign up for a free account today.
+                </h2>
+                <p class="text-sm/base tracking-tight font-semibold text-gray-400">Get access to opportunities in Deutschland, for free!</p>
+            </div>
+
+            <div class="mt-15 sm:mx-auto sm:w-full sm:max-w-sm">
+                <form class="space-y-2" id="registrationForm" action="#" method="POST">
+
+                    <div>
+                        <label for="username"
+                        class="block text-sm/6 font-medium text-gray-900">Username</label>
+                        <div class="mt-2">
+                            <input type="username"
+                            name="username"
+                            autocomplete="username"
+                            required
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
+                            outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400
+                            focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="email"
+                        class="block text-sm/6 font-medium text-gray-900">Email address</label>
+                        <div class="mt-1">
+                            <input type="email"
+                            name="email"
+                            autocomplete="email"
+                            required
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
+                            outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400
+                            focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password"
+                        class="block text-sm/6 font-medium text-gray-900">Password</label>
+                        <div class="mt-1">
+                            <input type="password"
+                            name="password"
+                            autocomplete="new-password"
+                            required
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
+                            outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400
+                            focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit"
+                            class="mt-10 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs
+                            hover:bg-indigo-500 transition duration-400 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign up for free
+                        </button>
+                    </div>
+
+                </form>
+
+                <p class="mt-10 text-center text-sm/6 text-gray-500">
+                    Already have an account?
+                    <a href="#"
+                        class="font-semibold text-indigo-600 hover:text-indigo-500">Log into your account
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+    </body>
+
+    <script src="./dist/assets/ts/register.js" defer></script>
+
+</html>
