@@ -1,71 +1,41 @@
-interface RegisterPayload{
-    username:string;
-    email:string;
-    password:string;
-}
+// Waiting for DOM to load
 
-interface RegisterResponse{
-    message?:string;
-    error?:string;
-}
+document.addEventListener('DOMContentLoaded', ()=> {
+    const form= document.getElementById('registrationForm') as HTMLFormElement | null;
 
-// CSRF token helper configuration
-function getCSRFToken():string | null{
-    const name='csrftoken';
-    const cookies=document.cookie.split(';');
+    if (!form) return;
 
-    for (const cookie in cookies){
-        const trimmed=cookie.trim();
-        if (trimmed.startsWith(name+'=')){
-            return decodeURIComponent(trimmed.substring(name.length+1));
+    form.addEventListener('submit', async(event:Event)=>{
+        event.preventDefault();
+
+        // Get form data
+        const formData=new FormData(form);
+        const data={
+            username:formData.get('username') as string,
+            email:formData.get('email') as string,
+            password:formData.get('password') as string, // made an error here with get('email') instead of get('password')
+        };
+
+        try{
+            const response=await fetch('http://localhost:8000/auth/register/', {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify(data),
+            });
+
+            const result=await response.json();
+            
+            if (response.ok){
+                alert(result.message || 'Registration successful!');
+                form.reset();
+            } else{
+                alert(result.error || 'Registration failed!');
+            }
+
+        } catch (error){
+            alert('An error occurred: '+error);
         }
-    }
-
-    return null;
-}
-
-async function submitRegistrationForm(event:Event):Promise<void>{
-    event.preventDefault();
-
-    const form=event.target as HTMLFormElement;
-    const username=(form.querySelector('[name="username"]') as HTMLInputElement).value;
-    const email=(form.querySelector('[name="email"]') as HTMLInputElement).value;
-    const password=(form.querySelector('[name="password"]') as HTMLInputElement).value;
-
-    const payload:RegisterPayload={
-        username, email, password
-    };
-
-    try{
-        // To later fetch from .env file instead
-        const response=await fetch("http://localhost:8000/auth/register/", {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                // 'X-CSRFToken':getCSRFToken() || '' // activate when using CSRF protection
-            },
-            body:JSON.stringify(payload),
-        });
-
-        const data:RegisterResponse=await response.json();
-
-        if (response.ok){
-            alert(data.message || 'SUCCESS: Registration was successful!');
-        } else{
-            alert(data.error || 'ERROR: Registration failed');
-        }
-
-    } catch (error:any){
-        alert('INTERNAL SERVER ERROR: An error occurred during registration attempt: '+error.message);
-    }
-}
-
-// Event listener for when DOM is ready
-document.addEventListener('DOMContentLoaded', ()=>{
-    const form=document.getElementById('registrationForm') as HTMLFormElement || null;
-    if (form){
-        form.addEventListener('submit', submitRegistrationForm);
-    } else{
-        console.error('ERROR: Registration form not found in DOM!');
-    }
-})
+    });
+});
