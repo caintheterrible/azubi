@@ -4,6 +4,33 @@ from django.views.decorators.csrf import csrf_exempt
 import hashlib
 from django.db import connection
 
+def check_if_existing(username: str, email: str) -> str | None:
+    query = """
+        SELECT username, email
+        FROM users
+        WHERE username = %s OR email = %s
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(query, [username, email])
+        results = cursor.fetchall()
+
+    username_exists = False
+    email_exists = False
+
+    for db_username, db_email in results:
+        if db_username == username:
+            username_exists = True
+        if db_email == email:
+            email_exists = True
+
+    # Username fields will be replaced with firstName, lastName
+    if username_exists:
+        return "Username already exists"
+    if email_exists:
+        return "Email already exists"
+
+    return None  # No match found
+
 
 @csrf_exempt
 def register(request):
@@ -38,15 +65,18 @@ def register(request):
 
         try:
             # Check for existing username or email
-            cursor.execute("SELECT 1 FROM users WHERE username = %s OR email = %s", [username, email])
-            if cursor.fetchone():
-                return JsonResponse({'error': 'Username or email already exists.'}, status=400)
+            existing=check_if_existing(username, email)
+            if existing:
+                return JsonResponse({
+                    'error': existing
+                }, status=400)
 
             # Insert user
             cursor.execute(
                 "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
                 [username, email, hashed_password]
             )
+
             return JsonResponse({
                 'message': 'User registered successfully!',
                 # 'username': username,
