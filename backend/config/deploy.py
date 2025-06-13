@@ -22,6 +22,18 @@ DATABASES={
     'analytics':get_sqlite_database_config('analytics.sqlite3'),
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'azubiPass@22',  # Be sure to escape this if needed
+#         'HOST': 'db.sbqtkuxgbpadbemnbjyf.supabase.co',
+#         'PORT': '5432',
+#     }
+# }
+
+
 # Other settings
 LANGUAGE:str='en-us'
 USE_TZ:bool=True
