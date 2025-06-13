@@ -49,17 +49,17 @@ def register(request):
     missing_fields = [field for field in ['username', 'email', 'password'] if not data.get(field)]
     if missing_fields:
         return JsonResponse({'error': f"Missing fields: {', '.join(missing_fields)}."}, status=400)
-    
+
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
     # TEMP: Ensure users table exists (for testing only)
     with connection.cursor() as cursor:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT UNIQUE,
-                email TEXT UNIQUE,
-                password TEXT
+                id SERIAL PRIMARY KEY,
+                username TEXT UNIQUE NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL
             )
         """)
 
@@ -87,3 +87,48 @@ def register(request):
 
         except Exception as e:
             return JsonResponse({'error': f"Database error: {str(e)}"}, status=500)
+
+
+@csrf_exempt
+def login(request):
+    """Login route logic."""
+    if request.method!='POST':
+        return HttpResponseBadRequest(f"REQUEST FAILED: Expected 'POST' request.")
+
+    try:
+        data=json.loads(request.body.decode('utf-8'))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({
+            'error':'INVALID JSON FORMAT!'
+        }, status=400)
+
+    email=data.get('email')
+    password=data.get('password')
+
+    missing_fields=[field for field in ['email', 'password'] if not data.get(field)]
+    if missing_fields:
+        return JsonResponse({
+            'error':'Some fields are required but missing'
+        }, status=400)
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT email FROM users WHERE email = %s""", [email])
+            existing=cursor.fetchall()
+
+        if not existing:
+            return JsonResponse({
+                'error':'Credentials not found!',
+            }, status=400)
+
+        # to verify_password() if matches hash from user credentials
+
+        # Simulating temporary direct success if user in database- to reconfigure for tighter security, like two-factor security features
+        return JsonResponse(data={
+            'message':'User login successful!',
+        }, status=200)
+
+    except Exception as exc:
+        return JsonResponse(data={
+            'error':'An internal server error occurred while logging in. Please try again later.'
+        }, status=500)
