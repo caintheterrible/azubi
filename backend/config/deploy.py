@@ -1,7 +1,7 @@
 from pathlib import Path
 from config.base import base_configurations
 from config.development import development_configurations
-from config.sqlconfig import get_sqlite_database_config
+# from config.sqlconfig import get_sqlite_database_config
 
 # Environment-specific configurations (to be configured later for dynamic loading)
 DEBUG:bool=development_configurations.debug
@@ -17,21 +17,21 @@ BASE_DIR:Path=base_configurations.base_dir
 ROOT_URLCONF:str=base_configurations.root_url_configurations
 
 # Database configurations (to be reconfigured to accept dynamic loading of preferred configurations)
-DATABASES={
-    'default':get_sqlite_database_config('db.sqlite3'),
-    'analytics':get_sqlite_database_config('analytics.sqlite3'),
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'azubiPass@22',  # Be sure to escape this if needed
-#         'HOST': 'db.sbqtkuxgbpadbemnbjyf.supabase.co',
-#         'PORT': '5432',
-#     }
+# DATABASES={
+#     'default':get_sqlite_database_config('db.sqlite3'),
+#     'analytics':get_sqlite_database_config('analytics.sqlite3'),
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'azubiPass@22',  # may escape this if needed
+        'HOST': 'db.sbqtkuxgbpadbemnbjyf.supabase.co',
+        'PORT': '5432',
+    }
+}
 
 
 # Other settings
