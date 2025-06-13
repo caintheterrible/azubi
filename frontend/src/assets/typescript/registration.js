@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = {
             username: formData.get('username'),
             email: formData.get('email'),
-            password: formData.get('password'), // made an error here with get('email') instead of get('password')
+            password: formData.get('password'),
         };
         try {
             const response = yield fetch('http://localhost:8000/auth/register/', {
@@ -32,8 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const result = yield response.json();
             if (response.ok) {
-                alert(result.message || 'Registration successful!');
+                alert(result.message || 'User registered successfully!');
                 form.reset();
+                window.location.href = 'frontend/src/assets/pages/dashboard.html';
             }
             else {
                 alert(result.error || 'Registration failed!');

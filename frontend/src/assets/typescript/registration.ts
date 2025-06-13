@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
         const data={
             username:formData.get('username') as string,
             email:formData.get('email') as string,
-            password:formData.get('password') as string, // made an error here with get('email') instead of get('password')
+            password:formData.get('password') as string,
         };
 
         try{
@@ -26,11 +26,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
             });
 
             const result=await response.json();
-            
-            if (response.ok){
-                alert(result.message || 'Registration successful!');
+
+            if (response.ok) {
+                alert(result.message || 'User registered successfully!')
                 form.reset();
-            } else{
+                window.location.href = 'frontend/src/assets/pages/dashboard.html';
+            } else {
                 alert(result.error || 'Registration failed!');
             }
 
